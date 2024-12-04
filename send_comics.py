@@ -1,6 +1,6 @@
 import telegram
 from environs import Env
-from comics_functions import download_comics, get_comics_comment, delete_picture, get_random_comics
+from comics_functions import delete_picture, get_random_comics_num, download_picture, get_comics
 
 def main():
 
@@ -11,10 +11,11 @@ def main():
     bot = telegram.Bot(token=env.str('TG_BOT_TOKEN'))
     chat_id = env.str('TG_CHAT_ID')
 
-    random_comics_url = get_random_comics()
+    random_comics_url = get_random_comics_num()
 
-    download_comics(filename, random_comics_url)
-    comics_comment = get_comics_comment(random_comics_url)
+    comics = get_comics(random_comics_url)
+    download_picture(filename, comics['img'])
+    comics_comment = comics['alt']
     
     with open(filename, 'rb') as image:
         bot.send_document(

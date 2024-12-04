@@ -9,7 +9,7 @@ def download_picture(filename, url):
     with open (filename, 'wb') as file:
         file.write(response.content)
 
-def get_random_comics():
+def get_random_comics_num():
 
     last_comics_url = 'https://xkcd.com/info.0.json'
 
@@ -22,36 +22,14 @@ def get_random_comics():
 
     return f'https://xkcd.com/{random_comics_num}/info.0.json'
 
-def download_comics(filename, random_comics_url):
-
+def get_comics(random_comics_url):
     response = requests.get(random_comics_url)
     response.raise_for_status()
     comics = response.json()
-    comics_photo = comics['img']
 
-    return download_picture(filename, comics_photo)
-
-def get_comics_comment(random_comics_url):
-
-    response = requests.get(random_comics_url)
-    response.raise_for_status()
-    comics = response.json()
-    comics_comment = comics['alt']
-
-    return comics_comment
+    return comics
 
 def delete_picture(filename):
 
     if os.path.exists(filename):
         os.remove(filename)
-
-def main():
-    filename = 'comics.png'
-    random_comics_url = get_random_comics()
-
-    download_comics(filename, random_comics_url)
-    get_comics_comment(random_comics_url)
-    delete_picture(filename)
-    
-if __name__ == '__main__':
-    main()
